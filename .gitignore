@@ -20,3 +20,6 @@ out/
 .idea/
 .vscode/
 *.xcodeproj/xcuserdata/
+# 备份目录（不应提交）
+.git.original/
+.git.backup/
