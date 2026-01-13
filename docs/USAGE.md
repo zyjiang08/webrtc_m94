@@ -50,28 +50,40 @@ webrtc_m94/
 | 目录 | 大小 | 说明 |
 |------|------|------|
 | `src/` | ~800MB | WebRTC 核心源码 |
-| `third_party/` | 1.4GB | 精简的第三方依赖 |
+| `third_party/` | 374MB | Python 运行时依赖（jinja2等） |
 | `build/` | ~50MB | 构建配置文件 |
 | `docs/` | <1MB | 文档 |
 | **总计** | **~2.2GB** | 源码仓库大小（93% 缩减） |
-| 工具链 (Android) | 3.6GB | 独立存储，不在仓库中 |
+| 工具链 (Android NDK) | 3.6GB | 独立存储，不在仓库中 |
 | 工具链 (Linux) | 232KB | 独立存储，不在仓库中 |
+| 工具链 (LLVM) | 195MB | 独立存储，HOST 平台相关 |
+| **工具链总计** | **3.8GB** | Linux x86-64 HOST 工具链 |
 
 ## 工具链管理
 
 ### 工具链位置
 
-工具链存储在独立目录，不随源码仓库分发：
+工具链存储在独立目录，不随源码仓库分发。
+
+**重要**: 工具链是 HOST 平台相关的（运行编译器的机器），而非 TARGET 平台相关（要编译的目标）。
+
+当前配置为 **Linux x86-64 HOST**，可以编译：
+- Linux x64 目标
+- Android arm64/armv7/x86/x64 目标
 
 ```
 /home/harry/awork/webrtc-toolchains/
-├── android/               # Android 工具链 (3.6GB)
+├── android/               # Android NDK (3.6GB)
 │   ├── gn                # GN 构建工具
 │   ├── ninja             # Ninja 编译工具
 │   └── ndk/              # Android NDK r21
-└── linux/                # Linux 工具链 (232KB)
-    ├── gn                # GN 构建工具
-    └── ninja             # Ninja 编译工具
+├── linux/                # Linux 工具 (232KB)
+│   ├── gn                # GN 构建工具
+│   └── ninja             # Ninja 编译工具
+└── llvm-build/           # LLVM 编译器 (195MB)
+    └── Release+Asserts/
+        ├── bin/clang     # Linux x86-64 HOST 二进制
+        └── lib/          # Android 目标运行时库
 ```
 
 ### 工具链配置

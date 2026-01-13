@@ -92,10 +92,12 @@ git commit -m "Update webrtc submodule to webrtc_m94"
 | **新仓库大小** | 2.2GB |
 | **缩减比例** | 93% |
 | **third_party 原始** | 28GB |
-| **third_party 优化后** | 1.4GB |
+| **third_party 优化后** | 374MB (仅 Python 运行时依赖) |
 | **Android 工具链** | 3.6GB |
 | **Linux 工具链** | 232KB |
-| **Git 提交** | 2 个提交，9906+ 文件 |
+| **LLVM 编译器** | 195MB (HOST 平台相关) |
+| **工具链总计** | 3.8GB |
+| **Git 提交** | 3 个提交，9906+ 文件 |
 
 ## 支持的平台和架构
 
@@ -114,16 +116,18 @@ git commit -m "Update webrtc submodule to webrtc_m94"
 /home/harry/awork/
 ├── webrtc_m94_temp/          # 新的 WebRTC 仓库 (2.2GB)
 │   ├── src/                  # 源码
-│   ├── third_party/          # 依赖 (1.4GB)
+│   ├── third_party/          # Python 运行时依赖 (374MB)
+│   │   └── llvm-build -> /home/harry/awork/webrtc-toolchains/llvm-build
 │   ├── build/                # 构建配置
 │   ├── scripts/              # 脚本
 │   ├── toolchains/           # 符号链接
 │   ├── out/                  # 编译输出
 │   └── docs/                 # 文档
 │
-├── webrtc-toolchains/        # 工具链存储
-│   ├── android/              # Android 工具链 (3.6GB)
-│   └── linux/                # Linux 工具链 (232KB)
+├── webrtc-toolchains/        # 工具链存储 (HOST 平台: Linux x86-64)
+│   ├── android/              # Android NDK (3.6GB)
+│   ├── linux/                # Linux 工具 (232KB)
+│   └── llvm-build/           # LLVM 编译器 (195MB, HOST 二进制)
 │
 └── RTN-Player/               # 主项目
     └── webrtc/               # submodule (指向 webrtc_m94_temp)

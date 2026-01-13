@@ -53,6 +53,9 @@
     }
   },
   "toolchains": {
+    "note": "Toolchains are HOST-platform specific (where compilation runs), not TARGET-platform specific (what you're compiling)",
+    "host_platform": "linux-x64",
+    "can_compile_targets": ["linux-x64", "android-arm64", "android-armv7", "android-x64", "android-x86"],
     "android": {
       "description": "Android NDK and SDK toolchain",
       "local_path": "/home/harry/awork/webrtc-toolchains/android",
@@ -61,8 +64,7 @@
       "components": [
         "GN build tool",
         "Ninja build tool",
-        "Android NDK r21",
-        "LLVM/Clang compiler"
+        "Android NDK r21"
       ]
     },
     "linux": {
@@ -73,6 +75,19 @@
       "components": [
         "GN build tool",
         "Ninja build tool"
+      ]
+    },
+    "llvm-build": {
+      "description": "LLVM/Clang cross-compiler (HOST binary for Linux x86-64)",
+      "local_path": "/home/harry/awork/webrtc-toolchains/llvm-build",
+      "url": "file:///home/harry/awork/webrtc-toolchains/llvm-build",
+      "size": "195MB",
+      "host_arch": "linux-x86-64",
+      "can_compile": ["linux-x64", "android-arm64", "android-armv7", "android-x86", "android-x64"],
+      "components": [
+        "Clang/LLVM compiler",
+        "Android runtime libraries",
+        "Cross-compilation support"
       ]
     }
   }

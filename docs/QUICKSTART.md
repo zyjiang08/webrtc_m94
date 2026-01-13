@@ -34,18 +34,26 @@ cd /home/harry/awork/webrtc_m94_temp
 
 工具链已打包到本地路径 `/home/harry/awork/webrtc-toolchains/`。
 
+**重要概念**:
+- **HOST 平台**: 运行编译器的机器 (当前: Linux x86-64)
+- **TARGET 平台**: 编译产物运行的目标 (Linux, Android)
+
+当前 Linux HOST 可以编译 Linux 和 Android 目标。如需编译 iOS，必须使用 macOS HOST。
+
 ```bash
 # 检查工具链是否存在
 ls -la /home/harry/awork/webrtc-toolchains/
 
 # 应该看到:
-# - android/  (3.6GB - Android NDK, GN, Ninja)
-# - linux/    (232KB - GN, Ninja)
+# - android/     (3.6GB - Android NDK, GN, Ninja)
+# - linux/       (232KB - GN, Ninja)
+# - llvm-build/  (195MB - LLVM/Clang for Linux HOST)
 ```
 
 **重要**: 工具链路径已在 `DEPS.json` 中配置为：
 - Android: `/home/harry/awork/webrtc-toolchains/android`
 - Linux: `/home/harry/awork/webrtc-toolchains/linux`
+- LLVM: `/home/harry/awork/webrtc-toolchains/llvm-build`
 
 如果工具链不存在，请联系管理员获取。
 

@@ -4,22 +4,30 @@ Cross-platform WebRTC repository for LLS-Player project. This is branch M94 with
 
 ## Features
 
-- **Minimal Dependencies**: Only ~1.4GB of essential third-party libraries (down from 28GB)
-- **External Toolchains**: Build tools packaged separately for easy management
+- **Minimal Dependencies**: Only ~374MB of Python runtime dependencies (down from 28GB)
+- **External Toolchains**: Build tools (3.8GB) packaged separately for easy management
 - **Cross-Platform**: Supports Linux and Android builds
 - **Clean Architecture**: Follows the design in `docs/cross-platform-webrtc-repository-design.md`
+- **HOST Platform**: Current setup is Linux x86-64 host, can compile Linux and Android targets
 
 ## Repository Structure
 
 ```
 webrtc_m94/
 ├── src/              # WebRTC core source code
-├── third_party/      # Essential runtime dependencies (~1.4GB)
+├── third_party/      # Python runtime dependencies (~374MB)
+│   └── llvm-build -> /home/harry/awork/webrtc-toolchains/llvm-build (symlink)
 ├── build/            # Build configuration files
 ├── scripts/          # Build and toolchain management scripts
-├── toolchains/       # External build toolchains (not in git)
+├── toolchains/       # External build toolchains (symlinks, not in git)
 ├── out/              # Build outputs (not in git)
 └── docs/             # Documentation
+
+External toolchains (3.8GB total):
+/home/harry/awork/webrtc-toolchains/
+├── android/          # Android NDK (3.6GB)
+├── linux/            # Linux tools (232KB)
+└── llvm-build/       # LLVM compiler (195MB, Linux x86-64 HOST binary)
 ```
 
 ## Quick Start
