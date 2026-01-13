@@ -1,0 +1,42 @@
+# Build artifacts
+out/
+*.o
+*.a
+*.so
+*.dll
+*.dylib
+*.framework
+build.log
+
+# Toolchains (downloaded separately)
+toolchains/
+
+# Downloads
+downloads/
+
+# Temporary files
+*.pyc
+*.swp
+*~
+.DS_Store
+*.backup
+
+# IDE files
+.vscode/
+.idea/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/
+
+# Build cache
+.ninja_deps
+.ninja_log
+build.ninja
+args.gn
+
+# Test outputs
+test-results/
+*.log
+
+# OS specific
+Thumbs.db
+desktop.ini

@@ -1,0 +1,82 @@
+{
+  "version": "1.0.0",
+  "webrtc_branch": "m94",
+  "description": "Cross-platform WebRTC repository for LLS-Player project",
+  "dependencies": {
+    "abseil-cpp": {
+      "description": "Abseil C++ library",
+      "required": true
+    },
+    "boringssl": {
+      "description": "SSL/TLS library",
+      "required": true
+    },
+    "libvpx": {
+      "description": "VP8/VP9 video codec",
+      "required": true
+    },
+    "libyuv": {
+      "description": "YUV conversion library",
+      "required": true
+    },
+    "opus": {
+      "description": "Opus audio codec",
+      "required": true
+    },
+    "usrsctp": {
+      "description": "SCTP protocol stack for DataChannel",
+      "required": true
+    },
+    "protobuf": {
+      "description": "Protocol Buffers",
+      "required": true
+    },
+    "jsoncpp": {
+      "description": "JSON parser",
+      "required": true
+    },
+    "libaom": {
+      "description": "AV1 video codec",
+      "required": false
+    },
+    "openh264": {
+      "description": "H.264 video codec",
+      "required": false
+    },
+    "libsrtp": {
+      "description": "SRTP encryption",
+      "required": false
+    },
+    "googletest": {
+      "description": "Google Test framework",
+      "required": false
+    }
+  },
+  "toolchains": {
+    "android": {
+      "description": "Android NDK and SDK toolchain",
+      "url": "https://storage.example.com/webrtc-toolchains/android-toolchain-v1.0.0.zip",
+      "sha256": "TODO",
+      "size": "7.5GB",
+      "components": [
+        "GN build tool",
+        "Ninja build tool",
+        "Android NDK r21",
+        "Android SDK (minimal)",
+        "LLVM/Clang compiler"
+      ]
+    },
+    "linux": {
+      "description": "Linux build toolchain",
+      "url": "https://storage.example.com/webrtc-toolchains/linux-toolchain-v1.0.0.zip",
+      "sha256": "TODO",
+      "size": "500MB",
+      "components": [
+        "GN build tool",
+        "Ninja build tool",
+        "Clang compiler",
+        "Linux sysroot"
+      ]
+    }
+  }
+}
