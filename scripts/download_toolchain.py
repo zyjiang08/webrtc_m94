@@ -57,6 +57,7 @@ def setup_toolchain(platform, root_dir, deps):
 
     toolchain_info = deps['toolchains'][platform]
     url = toolchain_info.get('url', '')
+    local_path = toolchain_info.get('local_path', '')
     expected_sha256 = toolchain_info.get('sha256', '')
 
     # 创建目录
@@ -73,24 +74,32 @@ def setup_toolchain(platform, root_dir, deps):
         print("  Use --force to re-download")
         return True
 
+    # 检查本地路径
+    if local_path and os.path.exists(local_path):
+        print(f"Found local toolchain at: {local_path}")
+        print(f"Creating symlink: {platform_dir} -> {local_path}")
+
+        # 创建符号链接
+        if os.path.exists(platform_dir):
+            if os.path.islink(platform_dir):
+                os.unlink(platform_dir)
+            else:
+                shutil.rmtree(platform_dir)
+
+        os.symlink(local_path, platform_dir)
+        print(f"\n✓ Toolchain setup complete for {platform}!")
+        print(f"  Location: {platform_dir} -> {local_path}")
+        return True
+
     # 检查 URL
-    if url == "https://storage.example.com/webrtc-toolchains/" + platform + "-toolchain-v1.0.0.zip":
+    if not url or url.startswith("file://"):
         print("=" * 60)
         print("TOOLCHAIN SETUP REQUIRED")
         print("=" * 60)
-        print(f"\nThe {platform} toolchain needs to be set up manually.")
-        print("\nFor Android toolchain:")
-        print("  1. The toolchain should contain:")
-        print("     - Android NDK (from third_party/android_ndk)")
-        print("     - GN build tool")
-        print("     - Ninja build tool")
-        print("  2. Place these files in:")
-        print(f"     {platform_dir}/")
-        print("\nFor now, you can use the existing tools from the system:")
-        print(f"  GN:    /home/harry/work/LLS-Player/depot_tools/gn")
-        print(f"  Ninja: /usr/bin/ninja")
-        print(f"  NDK:   Copy from third_party/android_ndk")
-        print("\nOr wait for the toolchain to be packaged and uploaded.")
+        print(f"\nThe {platform} toolchain is configured to use local path:")
+        print(f"  {local_path}")
+        print("\nBut the path does not exist.")
+        print("\nPlease ensure the toolchain is available at the configured location.")
         return False
 
     # 下载文件

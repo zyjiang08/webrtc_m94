@@ -55,27 +55,24 @@
   "toolchains": {
     "android": {
       "description": "Android NDK and SDK toolchain",
-      "url": "https://storage.example.com/webrtc-toolchains/android-toolchain-v1.0.0.zip",
-      "sha256": "TODO",
-      "size": "7.5GB",
+      "local_path": "/home/harry/awork/webrtc-toolchains/android",
+      "url": "file:///home/harry/awork/webrtc-toolchains/android",
+      "size": "3.6GB",
       "components": [
         "GN build tool",
         "Ninja build tool",
         "Android NDK r21",
-        "Android SDK (minimal)",
         "LLVM/Clang compiler"
       ]
     },
     "linux": {
       "description": "Linux build toolchain",
-      "url": "https://storage.example.com/webrtc-toolchains/linux-toolchain-v1.0.0.zip",
-      "sha256": "TODO",
-      "size": "500MB",
+      "local_path": "/home/harry/awork/webrtc-toolchains/linux",
+      "url": "file:///home/harry/awork/webrtc-toolchains/linux",
+      "size": "232KB",
       "components": [
         "GN build tool",
-        "Ninja build tool",
-        "Clang compiler",
-        "Linux sysroot"
+        "Ninja build tool"
       ]
     }
   }
