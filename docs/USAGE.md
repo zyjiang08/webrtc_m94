@@ -63,27 +63,35 @@ webrtc_m94/
 
 ### 工具链位置
 
-工具链存储在独立目录，不随源码仓库分发。
+工具链按 HOST 平台组织，独立存储，不随源码仓库分发。
 
 **重要**: 工具链是 HOST 平台相关的（运行编译器的机器），而非 TARGET 平台相关（要编译的目标）。
 
-当前配置为 **Linux x86-64 HOST**，可以编译：
-- Linux x64 目标
-- Android arm64/armv7/x86/x64 目标
+## 支持的 HOST 平台
+
+### linux-x64 (当前配置)
+**可编译**: Linux x64, Android (arm64/armv7/x86/x64)
+
+### darwin-x64 (未来支持)
+**可编译**: macOS x64, iOS arm64, Android (arm64/armv7/x86/x64)
+
+### windows-x64 (未来支持)
+**可编译**: Windows x64, Android (arm64/armv7/x86/x64)
+
+## 目录结构
 
 ```
 /home/harry/awork/webrtc-toolchains/
-├── android/               # Android NDK (3.6GB)
-│   ├── gn                # GN 构建工具
-│   ├── ninja             # Ninja 编译工具
-│   └── ndk/              # Android NDK r21
-├── linux/                # Linux 工具 (232KB)
-│   ├── gn                # GN 构建工具
-│   └── ninja             # Ninja 编译工具
-└── llvm-build/           # LLVM 编译器 (195MB)
-    └── Release+Asserts/
-        ├── bin/clang     # Linux x86-64 HOST 二进制
-        └── lib/          # Android 目标运行时库
+├── linux-x64/            # Linux x86-64 HOST (3.8GB, 当前)
+│   ├── build-tools/      # GN, Ninja (232KB)
+│   ├── llvm-build/       # LLVM 14.0.0 (195MB)
+│   │   └── Release+Asserts/
+│   │       ├── bin/      # clang, lld 等
+│   │       └── lib/      # Android 运行时库
+│   └── ndk/              # Android NDK r21 (3.6GB)
+│       └── ndk/
+├── darwin-x64/           # macOS HOST (未配置)
+└── windows-x64/          # Windows HOST (未配置)
 ```
 
 ### 工具链配置

@@ -5,15 +5,25 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+# 检测 HOST 平台
+case "$(uname -s)" in
+    Linux*)     HOST_PLATFORM="linux-x64";;
+    Darwin*)    HOST_PLATFORM="darwin-x64";;
+    *)          echo "Error: Linux build only supported on Linux/macOS HOST"; exit 1;;
+esac
+
+echo "HOST platform: $HOST_PLATFORM"
+
 # 检查工具链
-if [ ! -d "$ROOT_DIR/toolchains/linux" ]; then
-    echo "Error: Linux toolchain not found!"
-    echo "Please run: python3 scripts/download_toolchain.py linux"
+TOOLCHAIN_DIR="$ROOT_DIR/toolchains/$HOST_PLATFORM"
+if [ ! -d "$TOOLCHAIN_DIR" ]; then
+    echo "Error: $HOST_PLATFORM toolchain not found!"
+    echo "Please run: python3 scripts/download_toolchain.py $HOST_PLATFORM"
     exit 1
 fi
 
 # 设置环境变量
-export PATH="$ROOT_DIR/toolchains/linux:$PATH"
+export PATH="$TOOLCHAIN_DIR/build-tools:$PATH"
 
 # 架构
 ARCH=${1:-x64}  # 默认 x64
@@ -39,10 +49,10 @@ fi
 
 # 生成构建文件
 cd "$ROOT_DIR/src"
-$ROOT_DIR/toolchains/linux/gn gen "$OUT_DIR" --args="$GN_ARGS"
+gn gen "$OUT_DIR" --args="$GN_ARGS"
 
 # 编译
-$ROOT_DIR/toolchains/linux/ninja -C "$OUT_DIR" webrtc
+ninja -C "$OUT_DIR" webrtc
 
 echo "✓ Build complete!"
 echo "  Output: $OUT_DIR/obj/libwebrtc.a"

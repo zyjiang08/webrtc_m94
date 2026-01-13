@@ -32,39 +32,46 @@ cd /home/harry/awork/webrtc_m94_temp
 
 ### 步骤 2: 设置工具链
 
-工具链已打包到本地路径 `/home/harry/awork/webrtc-toolchains/`。
+工具链按 HOST 平台组织，存储在 `/home/harry/awork/webrtc-toolchains/`。
 
 **重要概念**:
-- **HOST 平台**: 运行编译器的机器 (当前: Linux x86-64)
-- **TARGET 平台**: 编译产物运行的目标 (Linux, Android)
+- **HOST 平台**: 运行编译器的机器 (Linux, macOS, Windows)
+- **TARGET 平台**: 编译产物运行的目标 (Linux, Android, iOS)
 
-当前 Linux HOST 可以编译 Linux 和 Android 目标。如需编译 iOS，必须使用 macOS HOST。
+跨平台编译支持:
+- **Linux HOST** → Linux, Android 目标 (当前配置)
+- **macOS HOST** → macOS, iOS, Android 目标 (未来支持)
+- **Windows HOST** → Windows, Android 目标 (未来支持)
 
 ```bash
-# 检查工具链是否存在
+# 检查工具链目录结构
 ls -la /home/harry/awork/webrtc-toolchains/
 
 # 应该看到:
-# - android/     (3.6GB - Android NDK, GN, Ninja)
-# - linux/       (232KB - GN, Ninja)
-# - llvm-build/  (195MB - LLVM/Clang for Linux HOST)
+# - linux-x64/    (3.8GB - 当前配置)
+#   ├── build-tools/  (232KB - GN, Ninja)
+#   ├── llvm-build/   (195MB - LLVM 14.0.0)
+#   └── ndk/          (3.6GB - Android NDK r21)
+# - darwin-x64/   (未来 - macOS HOST)
+# - windows-x64/  (未来 - Windows HOST)
 ```
 
-**重要**: 工具链路径已在 `DEPS.json` 中配置为：
-- Android: `/home/harry/awork/webrtc-toolchains/android`
-- Linux: `/home/harry/awork/webrtc-toolchains/linux`
-- LLVM: `/home/harry/awork/webrtc-toolchains/llvm-build`
+**配置**: 工具链路径在 `DEPS.json` 中按 HOST 平台配置：
+- Linux x64 HOST: `/home/harry/awork/webrtc-toolchains/linux-x64`
+- macOS x64 HOST: `/home/harry/awork/webrtc-toolchains/darwin-x64`
+- Windows x64 HOST: `/home/harry/awork/webrtc-toolchains/windows-x64`
 
 如果工具链不存在，请联系管理员获取。
 
 ### 步骤 3: 初始化工具链符号链接
 
 ```bash
-# 运行工具链设置脚本
-python3 scripts/download_toolchain.py android
-python3 scripts/download_toolchain.py linux
+# 运行工具链设置脚本 (自动检测 HOST 平台)
+python3 scripts/download_toolchain.py linux-x64    # Linux HOST
+python3 scripts/download_toolchain.py darwin-x64   # macOS HOST
+python3 scripts/download_toolchain.py windows-x64  # Windows HOST
 
-# 这会在 toolchains/ 目录下创建符号链接
+# 这会在 toolchains/<host-platform>/ 目录下创建符号链接
 ```
 
 ### 步骤 4: 编译

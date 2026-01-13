@@ -48,21 +48,32 @@ def extract_zip(zip_path, extract_dir):
         zip_ref.extractall(extract_dir)
     print("Extraction complete!")
 
-def setup_toolchain(platform, root_dir, deps):
-    """设置指定平台的工具链"""
-    if platform not in deps['toolchains']:
-        print(f"Error: Unknown platform '{platform}'")
-        print(f"Available platforms: {', '.join(deps['toolchains'].keys())}")
+def setup_toolchain(host_platform, root_dir, deps):
+    """设置指定 HOST 平台的工具链"""
+    # 过滤掉非平台键
+    available_hosts = [k for k in deps['toolchains'].keys() if k not in ['note', 'current_host']]
+
+    if host_platform not in available_hosts:
+        print(f"Error: Unknown HOST platform '{host_platform}'")
+        print(f"Available HOST platforms: {', '.join(available_hosts)}")
         return False
 
-    toolchain_info = deps['toolchains'][platform]
+    toolchain_info = deps['toolchains'][host_platform]
     url = toolchain_info.get('url', '')
     local_path = toolchain_info.get('local_path', '')
     expected_sha256 = toolchain_info.get('sha256', '')
+    status = toolchain_info.get('status', 'configured')
+
+    # 检查是否未配置
+    if status == 'not_configured':
+        print(f"⚠ {host_platform} toolchain is not configured yet.")
+        print(f"  This is a placeholder for future support.")
+        print(f"  Expected location: {local_path}")
+        return True  # 不算错误，只是未配置
 
     # 创建目录
     toolchains_dir = os.path.join(root_dir, 'toolchains')
-    platform_dir = os.path.join(toolchains_dir, platform)
+    platform_dir = os.path.join(toolchains_dir, host_platform)
     downloads_dir = os.path.join(root_dir, 'downloads')
 
     os.makedirs(downloads_dir, exist_ok=True)
@@ -87,7 +98,7 @@ def setup_toolchain(platform, root_dir, deps):
                 shutil.rmtree(platform_dir)
 
         os.symlink(local_path, platform_dir)
-        print(f"\n✓ Toolchain setup complete for {platform}!")
+        print(f"\n✓ Toolchain setup complete for {host_platform}!")
         print(f"  Location: {platform_dir} -> {local_path}")
         return True
 
@@ -96,7 +107,7 @@ def setup_toolchain(platform, root_dir, deps):
         print("=" * 60)
         print("TOOLCHAIN SETUP REQUIRED")
         print("=" * 60)
-        print(f"\nThe {platform} toolchain is configured to use local path:")
+        print(f"\nThe {host_platform} HOST toolchain is configured to use local path:")
         print(f"  {local_path}")
         print("\nBut the path does not exist.")
         print("\nPlease ensure the toolchain is available at the configured location.")
@@ -131,28 +142,31 @@ def setup_toolchain(platform, root_dir, deps):
 
     extract_zip(zip_path, platform_dir)
 
-    print(f"\n✓ Toolchain setup complete for {platform}!")
+    print(f"\n✓ Toolchain setup complete for {host_platform} HOST!")
     print(f"  Location: {platform_dir}")
 
     return True
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python3 download_toolchain.py <platform>")
-        print("Platforms: linux, android, all")
+        print("Usage: python3 download_toolchain.py <host_platform>")
+        print("HOST platforms: linux-x64, darwin-x64, windows-x64, all")
+        print("\nNote: Toolchains are organized by HOST platform (where you run the compiler)")
         sys.exit(1)
 
-    platform = sys.argv[1]
+    host_platform = sys.argv[1]
     deps, root_dir = load_deps()
 
-    if platform == 'all':
-        platforms = list(deps['toolchains'].keys())
-        for p in platforms:
-            if not setup_toolchain(p, root_dir, deps):
-                print(f"\nNote: {p} toolchain setup incomplete.")
+    if host_platform == 'all':
+        # 只处理实际的 HOST 平台配置
+        hosts = [k for k in deps['toolchains'].keys() if k not in ['note', 'current_host']]
+        print(f"Setting up toolchains for all HOST platforms: {', '.join(hosts)}\n")
+        for h in hosts:
+            if not setup_toolchain(h, root_dir, deps):
+                print(f"\nNote: {h} toolchain setup incomplete.")
                 print("Please follow the manual setup instructions above.\n")
     else:
-        if not setup_toolchain(platform, root_dir, deps):
+        if not setup_toolchain(host_platform, root_dir, deps):
             print("\nNote: Toolchain setup incomplete.")
             print("Please follow the manual setup instructions above.\n")
 

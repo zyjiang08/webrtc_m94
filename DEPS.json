@@ -53,42 +53,46 @@
     }
   },
   "toolchains": {
-    "note": "Toolchains are HOST-platform specific (where compilation runs), not TARGET-platform specific (what you're compiling)",
-    "host_platform": "linux-x64",
-    "can_compile_targets": ["linux-x64", "android-arm64", "android-armv7", "android-x64", "android-x86"],
-    "android": {
-      "description": "Android NDK and SDK toolchain",
-      "local_path": "/home/harry/awork/webrtc-toolchains/android",
-      "url": "file:///home/harry/awork/webrtc-toolchains/android",
-      "size": "3.6GB",
-      "components": [
-        "GN build tool",
-        "Ninja build tool",
-        "Android NDK r21"
-      ]
+    "note": "Toolchains are organized by HOST platform (where compilation runs). Each HOST can cross-compile multiple TARGET platforms.",
+    "current_host": "linux-x64",
+    "linux-x64": {
+      "description": "Linux x86-64 HOST toolchain (current)",
+      "host_platform": "linux-x64",
+      "can_compile_targets": ["linux-x64", "android-arm64", "android-armv7", "android-x64", "android-x86"],
+      "local_path": "/home/harry/awork/webrtc-toolchains/linux-x64",
+      "url": "file:///home/harry/awork/webrtc-toolchains/linux-x64",
+      "total_size": "3.8GB",
+      "components": {
+        "build-tools": {
+          "size": "232KB",
+          "items": ["GN build tool", "Ninja build tool"]
+        },
+        "llvm-build": {
+          "size": "195MB",
+          "items": ["Clang/LLVM 14.0.0", "Android runtime libraries", "Cross-compilation support"]
+        },
+        "ndk": {
+          "size": "3.6GB",
+          "items": ["Android NDK r21", "ARM/ARM64/x86/x64 toolchains"]
+        }
+      }
     },
-    "linux": {
-      "description": "Linux build toolchain",
-      "local_path": "/home/harry/awork/webrtc-toolchains/linux",
-      "url": "file:///home/harry/awork/webrtc-toolchains/linux",
-      "size": "232KB",
-      "components": [
-        "GN build tool",
-        "Ninja build tool"
-      ]
+    "darwin-x64": {
+      "description": "macOS x86-64 HOST toolchain (future support)",
+      "host_platform": "darwin-x64",
+      "can_compile_targets": ["darwin-x64", "ios-arm64", "android-arm64", "android-armv7", "android-x64", "android-x86"],
+      "local_path": "/home/harry/awork/webrtc-toolchains/darwin-x64",
+      "url": "file:///home/harry/awork/webrtc-toolchains/darwin-x64",
+      "status": "not_configured",
+      "note": "iOS compilation requires macOS HOST with Xcode"
     },
-    "llvm-build": {
-      "description": "LLVM/Clang cross-compiler (HOST binary for Linux x86-64)",
-      "local_path": "/home/harry/awork/webrtc-toolchains/llvm-build",
-      "url": "file:///home/harry/awork/webrtc-toolchains/llvm-build",
-      "size": "195MB",
-      "host_arch": "linux-x86-64",
-      "can_compile": ["linux-x64", "android-arm64", "android-armv7", "android-x86", "android-x64"],
-      "components": [
-        "Clang/LLVM compiler",
-        "Android runtime libraries",
-        "Cross-compilation support"
-      ]
+    "windows-x64": {
+      "description": "Windows x86-64 HOST toolchain (future support)",
+      "host_platform": "windows-x64",
+      "can_compile_targets": ["windows-x64", "android-arm64", "android-armv7", "android-x64", "android-x86"],
+      "local_path": "/home/harry/awork/webrtc-toolchains/windows-x64",
+      "url": "file:///home/harry/awork/webrtc-toolchains/windows-x64",
+      "status": "not_configured"
     }
   }
 }

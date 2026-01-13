@@ -23,11 +23,14 @@ webrtc_m94/
 ├── out/              # Build outputs (not in git)
 └── docs/             # Documentation
 
-External toolchains (3.8GB total):
+External toolchains (organized by HOST platform):
 /home/harry/awork/webrtc-toolchains/
-├── android/          # Android NDK (3.6GB)
-├── linux/            # Linux tools (232KB)
-└── llvm-build/       # LLVM compiler (195MB, Linux x86-64 HOST binary)
+├── linux-x64/        # Linux x86-64 HOST (3.8GB, current)
+│   ├── build-tools/  # GN, Ninja (232KB)
+│   ├── llvm-build/   # LLVM 14.0.0 (195MB)
+│   └── ndk/          # Android NDK r21 (3.6GB)
+├── darwin-x64/       # macOS HOST (future support)
+└── windows-x64/      # Windows HOST (future support)
 ```
 
 ## Quick Start
@@ -41,12 +44,16 @@ cd webrtc_m94
 
 ### 2. Download Toolchain
 
-```bash
-# For Android builds
-python3 scripts/download_toolchain.py android
+Toolchains are organized by HOST platform (where you run the compiler):
 
-# For Linux builds
-python3 scripts/download_toolchain.py linux
+```bash
+# Auto-detect and setup for current HOST
+python3 scripts/download_toolchain.py linux-x64    # Linux HOST
+python3 scripts/download_toolchain.py darwin-x64   # macOS HOST
+python3 scripts/download_toolchain.py windows-x64  # Windows HOST
+
+# Or setup all
+python3 scripts/download_toolchain.py all
 ```
 
 ### 3. Build

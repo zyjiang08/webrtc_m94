@@ -117,17 +117,20 @@ git commit -m "Update webrtc submodule to webrtc_m94"
 ├── webrtc_m94_temp/          # 新的 WebRTC 仓库 (2.2GB)
 │   ├── src/                  # 源码
 │   ├── third_party/          # Python 运行时依赖 (374MB)
-│   │   └── llvm-build -> /home/harry/awork/webrtc-toolchains/llvm-build
+│   │   └── llvm-build -> /home/harry/awork/webrtc-toolchains/linux-x64/llvm-build
 │   ├── build/                # 构建配置
 │   ├── scripts/              # 脚本
 │   ├── toolchains/           # 符号链接
 │   ├── out/                  # 编译输出
 │   └── docs/                 # 文档
 │
-├── webrtc-toolchains/        # 工具链存储 (HOST 平台: Linux x86-64)
-│   ├── android/              # Android NDK (3.6GB)
-│   ├── linux/                # Linux 工具 (232KB)
-│   └── llvm-build/           # LLVM 编译器 (195MB, HOST 二进制)
+├── webrtc-toolchains/        # 工具链存储 (按 HOST 平台组织)
+│   ├── linux-x64/            # Linux x86-64 HOST (3.8GB, 当前)
+│   │   ├── build-tools/      # GN, Ninja (232KB)
+│   │   ├── llvm-build/       # LLVM 14.0.0 (195MB)
+│   │   └── ndk/              # Android NDK r21 (3.6GB)
+│   ├── darwin-x64/           # macOS HOST (未来)
+│   └── windows-x64/          # Windows HOST (未来)
 │
 └── RTN-Player/               # 主项目
     └── webrtc/               # submodule (指向 webrtc_m94_temp)

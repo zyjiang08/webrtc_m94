@@ -5,17 +5,27 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+# 检测 HOST 平台
+case "$(uname -s)" in
+    Linux*)     HOST_PLATFORM="linux-x64";;
+    Darwin*)    HOST_PLATFORM="darwin-x64";;
+    MINGW*|MSYS*|CYGWIN*) HOST_PLATFORM="windows-x64";;
+    *)          echo "Error: Unsupported HOST platform"; exit 1;;
+esac
+
+echo "HOST platform: $HOST_PLATFORM"
+
 # 检查工具链
-if [ ! -d "$ROOT_DIR/toolchains/android" ]; then
-    echo "Error: Android toolchain not found!"
-    echo "Please run: python3 scripts/download_toolchain.py android"
+TOOLCHAIN_DIR="$ROOT_DIR/toolchains/$HOST_PLATFORM"
+if [ ! -d "$TOOLCHAIN_DIR" ]; then
+    echo "Error: $HOST_PLATFORM toolchain not found!"
+    echo "Please run: python3 scripts/download_toolchain.py $HOST_PLATFORM"
     exit 1
 fi
 
 # 设置环境变量
-export PATH="$ROOT_DIR/toolchains/android:$PATH"
-export ANDROID_NDK_HOME="$ROOT_DIR/toolchains/android/ndk"
-export ANDROID_SDK_ROOT="$ROOT_DIR/toolchains/android/sdk"
+export PATH="$TOOLCHAIN_DIR/build-tools:$PATH"
+export ANDROID_NDK_HOME="$TOOLCHAIN_DIR/ndk/ndk"
 
 # 架构
 ARCH=${1:-arm64}  # arm64, armv7, x64, x86
@@ -49,10 +59,10 @@ fi
 
 # 生成构建文件
 cd "$ROOT_DIR/src"
-$ROOT_DIR/toolchains/android/gn gen "$OUT_DIR" --args="$GN_ARGS"
+gn gen "$OUT_DIR" --args="$GN_ARGS"
 
 # 编译
-$ROOT_DIR/toolchains/android/ninja -C "$OUT_DIR" webrtc
+ninja -C "$OUT_DIR" webrtc
 
 echo "✓ Build complete!"
 echo "  Output: $OUT_DIR/obj/libwebrtc.a"
